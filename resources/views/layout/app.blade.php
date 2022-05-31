@@ -95,6 +95,7 @@
                             <li>Laravel Framework {{ app()->version() }}</li>
                             <li>Bootstrap 3.4.1</li>
                             <li>Google Charts</li>
+                            <li>Laravel Fortify 1.13.0</li>
                         </ul>
                     </div>
                 </div>

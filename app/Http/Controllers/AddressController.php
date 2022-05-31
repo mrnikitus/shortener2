@@ -226,7 +226,7 @@ class AddressController extends Controller
         if (preg_match('/^[\pL\pM\pN_-]+$/u', $slug) == 0) abort(404);
         // Получение адреса по сокращению из базы данных при условии, что пользователь, загрузивший ссылку, не удален
         $address = DB::table('addresses')->join('users','users.id','=','addresses.user_id')
-            ->select('addresses.*')->where('slug','=',$slug)->whereNull('users.deleted_at')->first();
+            ->select('addresses.*')->where('slug','=',$slug)->where('not_in_use', '=', 0)->whereNull('users.deleted_at')->first();
         if(!$address) abort(404);
         // Запись информации об адресе в таблицу
         $statistic = new Statistic(['address_id' => $address->id, 'ip' => request()->ip()]);
