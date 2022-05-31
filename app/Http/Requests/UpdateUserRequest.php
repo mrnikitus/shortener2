@@ -29,9 +29,9 @@ class UpdateUserRequest extends FormRequest
             'name' => ['required' ,'string', 'max:255'],
             'username' => ['required', 'unique:users,username,'.$this->user->id],
             'email' => ['email', 'max:255', 'nullable'],
-            'old_password' => [Rule::prohibitedIf($this->user()->id != $this->user->id), 'current_password', 'nullable'],
-            'password' => ['required_with:old_password', 'nullable','confirmed', Password::min(8)->letters()->numbers()],
-            'role' => ['integer', 'between:0,2', Rule::prohibitedIf($this->user()->role != 2)],
+            'old_password' => [Rule::requiredIf($this->password and $this->user()->id == $this->user->id),'current_password', 'nullable'],
+            'password' => ['required_with:old_password', 'nullable', 'confirmed', Password::min(8)->letters()->numbers()],
+            'role' => ['integer', 'between:0,2', Rule::prohibitedIf($this->user()->cannot('changeRole', $this->user))],
         ];
     }
 
@@ -45,6 +45,7 @@ class UpdateUserRequest extends FormRequest
             'username' => 'Логин',
             'email' => 'E-mail',
             'password' => 'Пароль',
+            'old_password' => 'Старый пароль',
             'role' => 'Роль'
         ];
     }

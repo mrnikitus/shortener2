@@ -66,7 +66,7 @@ class AddressPolicy
      */
     public function delete(User $user, Address $address)
     {
-        if (isset($address->user_role)) $role = $address->user_role; else $role = $user->role;
+        $role = isset($address->user->role) ? $address->user->role : $address->user_role;
         return $address->user_id === $user->id or ($user->role === 1 and $role !== 2) or $user->role === 2;
     }
 
@@ -101,7 +101,7 @@ class AddressPolicy
      */
     public function restore(User $user, Address $address)
     {
-        if (isset($address->user_role)) $role = $address->user_role; else $role = $user->role;
+        $role = isset($address->user->role) ? $address->user->role : $address->user_role;
         return $address->user_id === $user->id or ($user->role === 1 and $role !== 2) or $user->role === 2;
     }
 
@@ -114,7 +114,7 @@ class AddressPolicy
      */
     public function forceDelete(User $user, Address $address)
     {
-        if (isset($address->user_role)) $role = $address->user_role; else $role = $user->role;
+        $role = isset($address->user->role) ? $address->user->role : $address->user_role;
         return $address->user_id === $user->id or ($user->role === 1 and $role !== 2) or $user->role === 2;
     }
 }

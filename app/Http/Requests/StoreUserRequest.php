@@ -41,7 +41,7 @@ class StoreUserRequest extends FormRequest
             'username' => ['required', 'unique:users,username'],
             'email' => ['email', 'max:255', 'nullable'],
             'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()],
-            'role' => ['integer', 'between:0,2', Rule::prohibitedIf($this->user()->role != 2)],
+            'role' => ['integer', 'between:0,2', Rule::prohibitedIf($this->user()->cannot('addRole', User::class))],
         ];
     }
 

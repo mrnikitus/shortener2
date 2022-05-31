@@ -15,13 +15,17 @@
     @if (!$address->user)
         <p><strong>Пользователь: </strong> {{ \App\Models\User::withTrashed()->find($address->user_id)->username }} <em>(удален)</em></p>
     @elseif (request()->user()->id != $address->user->id)
-        <p><strong>Пользователь: </strong><a href="{{ route('users.show', ['user' => $address->user]) }}">{{ $address->user->name }}</a></p>
+        @can('update', $address->user)
+            <p><strong>Пользователь: </strong><a href="{{ route('users.show', ['user' => $address->user]) }}">{{ $address->user->name }}</a></p>
+        @else
+            <p><strong>Пользователь: </strong>{{ $address->user->name }}</p>
+        @endcan
     @endif
     <p><strong>URL: </strong><a target="_blank" href="{{ $address->url }}">{{ $address->url }}</a></p>
     <p><strong>Сокращённая ссылка: </strong><a href="{{ route('addresses.slug', ['slug'=>$address->slug]) }}" target="_blank">{{ route('addresses.slug', ['slug'=>$address->slug]) }}</a></p>
     <p><strong>Количество переходов: </strong>{{ $address->clicks }}</p>
     <a class="btn btn-default" href="{{ route('addresses.statistic', ['address' => $address->id]) }}"><span class="glyphicon glyphicon-stats"></span> Статистика ссылки</a>
-    @can('destroy', $address)
+    @can('delete', $address)
         <a class="btn btn-danger" href="#remove" data-toggle="modal"><span class="glyphicon glyphicon-trash"></span> Удалить ссылку</a>
     @endcan
     <h3>Изменение данных ссылки</h3>
